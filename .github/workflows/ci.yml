@@ -1,0 +1,24 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+    - '*'
+  pull_request:
+    branches:
+    - '*'
+jobs:
+  build:
+    name: Build for ${{ matrix.framework }}
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        framework: [ '3.1.x', '5.0.x' ]
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.framework }}
+    - name: Build
+      run: dotnet build src/EFMigrate.sln
